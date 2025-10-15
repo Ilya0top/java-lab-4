@@ -5,9 +5,50 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * Класс для чтения и парсинга CSV файлов с данными о сотрудниках.
+ * <p>
+ * Обеспечивает чтение CSV файлов с разделителем ';' и преобразование данных
+ * в объекты {@link Person} и {@link Department}. Автоматически генерирует
+ * идентификаторы для подразделений и кэширует их для избежания дублирования.
+ * </p>
+ *
+ * @author ilabe
+ * @version 1.0
+ */
 public class CsvReader
 {
 
+    /**
+     * Читает CSV файл и преобразует данные в список сотрудников.
+     * <p>
+     * Метод выполняет следующие действия:
+     * <ol>
+     *   <li>Ищет файл в ресурсах, текущей директории или src/main/resources</li>
+     *   <li>Читает заголовок и пропускает его</li>
+     *   <li>Парсит каждую строку, извлекая данные о сотруднике</li>
+     *   <li>Создает подразделения с автоматической генерацией ID</li>
+     *   <li>Кэширует подразделения для избежания дублирования</li>
+     *   <li>Обрабатывает ошибки парсинга отдельных строк</li>
+     * </ol>
+     * </p>
+     *
+     * <p><b>Формат ожидаемого CSV файла:</b></p>
+     * <pre>
+     * id;name;gender;BirtDate;Division;Salary
+     * 28281;Aahan;Male;15.05.1970;I;4800
+     * 28282;Aala;Female;07.02.1983;J;2600
+     * </pre>
+     *
+     * @param csvFilePath путь к CSV файлу. Может быть относительным или абсолютным путем.
+     *                   Файл ищется в следующем порядке: ресурсы, текущая директория,
+     *                   src/main/resources.
+     * @return список объектов {@link Person}, созданных из данных CSV файла
+     * @throws IOException если файл не найден или произошла ошибка ввода-вывода
+     *
+     * @see Person
+     * @see Department
+     */
     public List<Person> readPeopleFromCsv(String csvFilePath) throws IOException
     {
         List<Person> people = new ArrayList<>();
@@ -50,7 +91,8 @@ public class CsvReader
 
             String line;
             int lineCount = 0;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null)
+            {
                 lineCount++;
                 if (!line.trim().isEmpty())
                 {
